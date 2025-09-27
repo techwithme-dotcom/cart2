@@ -378,7 +378,7 @@ export default function PaymentPage() {
                                     style={{ marginLeft: "auto", fontSize: "15px" }}
                                     className="selling_price"
                                 >
-                                    ₹{mrp}
+                                    ₹{selling_price}
                                 </p>
                             </div>
                             <div className="flex py-1">
@@ -399,7 +399,7 @@ export default function PaymentPage() {
                                     style={{ marginLeft: "auto", fontSize: "15px" }}
                                     className="mrp"
                                 >
-                                    ₹{discount}
+                                    ₹{mrp - selling_price}
                                 </p>
                             </div>
 
@@ -469,3 +469,4 @@ export default function PaymentPage() {
         </main>
     );
 }
+
