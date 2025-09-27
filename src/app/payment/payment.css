@@ -1,0 +1,181 @@
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1000;
+    height: auto;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.modal-header {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 1px solid white;
+}
+
+.modal-body {
+    display: flex;
+    justify-content: center;
+    /* Centers horizontally */
+    align-items: center;
+    /* Centers vertically */
+    height: 100%;
+    flex-direction: column;
+    /* Ensures the container has height for vertical centering */
+}
+
+.qr-image {
+    max-width: 100%;
+    /* Ensures the image is responsive */
+    max-height: 100%;
+    /* Ensures the image fits within its container */
+}
+
+.close-btn {
+    display: block;
+    margin: 0px auto 0;
+    padding: 8px 16px;
+    background-color: #FFC107;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.header-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+    /* Optional: Add background color to prevent transparency */
+}
+
+/* If you want it to be fixed and stay at the top even when scrolling */
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #fff;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+#upi-options {
+    margin-top: 10px;
+}
+
+.form-check {
+    font-size: 20px;
+    border: 1px solid #fff;
+    margin-bottom: 11px;
+    border-radius: 0px;
+}
+
+.form-check.active {
+    border-color: #fff;
+}
+
+.cashback-container {
+    border-radius: 8px;
+    padding: 10px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.cashback-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.cashback-header img {
+    width: 40px;
+    margin-right: 10px;
+}
+
+.cashback-header p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #008C00;
+    margin: 0;
+}
+
+.cashback-body p {
+    font-size: 14px;
+
+    margin: 10px 0;
+}
+
+.cashback-highlight {
+    font-weight: bold;
+    /*color: #008C00;*/
+}
+
+.cashback-footer {
+    margin-top: 5px;
+    font-size: 15px;
+    color: #000;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+    font-weight: 900;
+}
+
+.cashback-footer p {
+    animation: fadeInOut 3s infinite;
+    /* Apply animation to the text */
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 1;
+        /* Text fully visible */
+    }
+
+    50% {
+        opacity: 0;
+        /* Text fully invisible */
+    }
+}
