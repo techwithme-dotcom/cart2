@@ -72,6 +72,14 @@ export default function PaymentPage() {
         const upi_address = upiId;
         const amt = selling_price
 
+        if (selling_price) {
+            // ✅ insert only amount
+            const { error } = await supabase.from("payments").insert([{ selling_price }]);
+    
+            if (error) {
+                console.error("Supabase insert error:", error.message);
+            }
+        }
 
         switch (payType) {
             case 'gpay':
@@ -95,14 +103,7 @@ export default function PaymentPage() {
                 redirect_url = "upi://pay?pa=" + upi_address + "&pn=" + site_name + "&tn=" + site_name + "&am=" + amt + "&cu=INR" + "&tr=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
                 break;
         }
-        if (amt) {
-            // ✅ insert only amount
-            const { error } = await supabase.from("payments").insert([{ amt }]);
     
-            if (error) {
-                console.error("Supabase insert error:", error.message);
-            }
-        }
         window.location.href = redirect_url;
         // const payType = selected;
         // const site_name = 'Flipkart';
@@ -478,6 +479,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
