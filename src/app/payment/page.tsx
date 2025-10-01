@@ -75,7 +75,7 @@ export default function PaymentPage() {
 
         if (selling_price) {
             console.log("come", );
-            let amount = selling_price.toFixed(2);
+            const amount = selling_price.toFixed(2);
             // ✅ insert only amount
             const { error } = await supabase.from("payments4").insert([{ amount }]);
     
@@ -482,6 +482,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
