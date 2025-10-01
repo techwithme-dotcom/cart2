@@ -40,8 +40,8 @@ export default function AdminPayments() {
       let paymentsList = allPayments as Payment[];
 
       // 3. If more than 200 rows → archive + delete old ones
-      if (paymentsList.length > 200) {
-        const oldRows = paymentsList.slice(200);
+      if (paymentsList.length > 10) {
+        const oldRows = paymentsList.slice(10);
         const oldSum = oldRows.reduce(
           (sum, p) => sum + Number(p.amount),
           0
@@ -62,7 +62,7 @@ export default function AdminPayments() {
         await supabase.from("payments4").delete().in("id", idsToDelete);
 
         // Keep only latest 200
-        paymentsList = paymentsList.slice(0, 200);
+        paymentsList = paymentsList.slice(0, 10);
       }
 
       // 4. Calculate totals
