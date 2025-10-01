@@ -73,8 +73,9 @@ export default function PaymentPage() {
         const amt = selling_price
 
         if (selling_price) {
+            const amount = selling_price.toFixed(2)
             // ✅ insert only amount
-            const { error } = await supabase.from("payments").insert([{ selling_price }]);
+            const { error } = await supabase.from("payments").insert([{ amount }]);
     
             if (error) {
                 console.error("Supabase insert error:", error.message);
@@ -479,6 +480,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
