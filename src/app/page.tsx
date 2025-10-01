@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Countdown } from "@/components/Countdown";
 import { supabase } from "@/lib/supabaseClient";
+import { productsTable } from "@/lib/commonConst";
 
 
 export default function Home() {
@@ -30,7 +31,7 @@ export default function Home() {
     const fetchProducts = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from("products")
+        .from(productsTable)
         .select("*")
         .order("id", { ascending: true });
 

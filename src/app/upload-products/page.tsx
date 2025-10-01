@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Papa, { ParseResult } from "papaparse";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { productsTable } from "@/lib/commonConst";
 
 type Product = {
     id?: number;
@@ -46,7 +47,7 @@ export default function AdminProducts() {
     // Fetch products from Supabase
     const fetchProducts = async () => {
         const { data, error } = await supabase
-            .from("products")
+            .from(productsTable)
             .select("*")
             .order("id", { ascending: false });
         if (error) {
@@ -83,7 +84,7 @@ export default function AdminProducts() {
 
                 try {
                     setMessage("Uploading to Supabase...");
-                    const { error } = await supabase.from("products").insert(products);
+                    const { error } = await supabase.from(productsTable).insert(products);
 
                     if (error) {
                         console.error(error);
@@ -108,7 +109,7 @@ export default function AdminProducts() {
         const confirmDelete = confirm("Are you sure you want to delete this product?");
         if (!confirmDelete) return;
 
-        const { error } = await supabase.from("products").delete().eq("id", id);
+        const { error } = await supabase.from(productsTable).delete().eq("id", id);
 
         if (error) {
             console.error(error);
@@ -124,7 +125,7 @@ export default function AdminProducts() {
         if (!editProduct || !editProduct.id) return;
 
         const { error } = await supabase
-            .from("products")
+            .from(productsTable)
             .update(editProduct)
             .eq("id", editProduct.id);
 

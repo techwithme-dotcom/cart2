@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { settingTable } from '@/lib/commonConst';
 
 export default function AdminUpiPage() {
     const [upiId, setUpiId] = useState('');
@@ -22,7 +23,7 @@ export default function AdminUpiPage() {
     // Fetch current UPI ID
     const fetchUpi = async () => {
         const { data, error } = await supabase
-            .from('settings')
+            .from(settingTable)
             .select('upiId')
             .limit(1)
             .single();
@@ -40,7 +41,7 @@ export default function AdminUpiPage() {
         setLoading(true);
 
         const { data: existing } = await supabase
-            .from('settings')
+            .from(settingTable)
             .select('id')
             .limit(1)
             .single();
@@ -48,7 +49,7 @@ export default function AdminUpiPage() {
         if (existing?.id) {
             // Update existing row
             const { error } = await supabase
-                .from('settings')
+                .from(settingTable)
                 .update({ upiId })
                 .eq('id', existing.id);
 
@@ -56,7 +57,7 @@ export default function AdminUpiPage() {
             else alert('UPI ID updated successfully!');
         } else {
             // Insert new row
-            const { error } = await supabase.from('settings').insert({ upiId });
+            const { error } = await supabase.from(settingTable).insert({ upiId });
 
             if (error) alert('Failed to add UPI ID: ' + error.message);
             else alert('UPI ID added successfully!');

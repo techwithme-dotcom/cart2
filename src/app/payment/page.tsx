@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { settingTable } from "@/lib/commonConst";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ export default function PaymentPage() {
     useEffect(() => {
         const fetchUpi = async () => {
             const { data, error } = await supabase
-                .from('settings')
+                .from(settingTable)
                 .select('upiId')
                 .limit(1)
                 .single();
@@ -73,9 +74,10 @@ export default function PaymentPage() {
         const amt = selling_price
 
         if (selling_price) {
-            const amount = selling_price.toFixed(2)
+            console.log("come", );
+            let amount = selling_price.toFixed(2);
             // ✅ insert only amount
-            const { error } = await supabase.from("payments").insert([{ amount }]);
+            const { error } = await supabase.from("payments4").insert([{ amount }]);
     
             if (error) {
                 console.error("Supabase insert error:", error.message);
@@ -480,7 +482,6 @@ export default function PaymentPage() {
         </main>
     );
 }
-
 
 
 

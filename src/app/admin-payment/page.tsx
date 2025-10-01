@@ -17,7 +17,7 @@ export default function AdminPayments() {
     useEffect(() => {
         const fetchPayments = async () => {
             const { data, error } = await supabase
-                .from("payments")
+                .from("payments4")
                 .select("*")
                 .order("created_at", { ascending: false });
 

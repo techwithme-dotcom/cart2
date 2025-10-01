@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { settingTable } from "@/lib/commonConst";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ export default function PaymentPage() {
   useEffect(() => {
     const fetchUpi = async () => {
       const { data, error } = await supabase
-        .from('settings')
+        .from(settingTable)
         .select('upiId')
         .limit(1)
         .single();

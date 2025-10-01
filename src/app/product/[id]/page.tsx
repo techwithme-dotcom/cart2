@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import ProductDetailsClient from "./ProductDetailsClient";
 import { supabase } from "@/lib/supabaseClient";
+import { productsTable } from "@/lib/commonConst";
 
 interface RouteParams {
   id: string;
@@ -30,7 +31,7 @@ export default async function ProductPage({ params,
 
   // Fetch product from Supabase
   const { data, error } = await supabase
-    .from("products")
+    .from(productsTable)
     .select("*")
     .eq("id", id)
     .single(); // ensures only one row
