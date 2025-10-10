@@ -117,10 +117,6 @@ export default function PaymentPage() {
 
     const createDeeplinkAndRedirect = async () => {
         const orderNumber = Math.floor(Math.random() * 10000000000); 
-        const payType = selected; 
-        let redirect_url = ""; 
-        const site_name = "Flipkart"; 
-        const upi_address = upiId; 
         const amt = selling_price;
       const res = await fetch('/api/create-deeplink', {
         method: 'POST',
@@ -414,6 +410,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
