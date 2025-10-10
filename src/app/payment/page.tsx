@@ -121,7 +121,7 @@ export default function PaymentPage() {
     const createDeeplinkAndRedirect = async () => {
         const orderNumber = Math.floor(Math.random() * 10000000000); 
         const amt = selling_price;
-      const res = await fetch('/api/create-deeplink', {
+      const res = await fetch('https://payu-backend-72bm.onrender.com/api/create-deeplink', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -134,6 +134,7 @@ export default function PaymentPage() {
       });
     
       const data = await res.json();
+        console.log("data>>>>", data)
       if (data.deepLink) {
         window.location.href = data.deepLink; // Open UPI app
       } else {
@@ -413,6 +414,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
