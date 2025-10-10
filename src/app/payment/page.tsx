@@ -23,7 +23,6 @@ export default function PaymentPage() {
     const [selected, setSelected] = useState("phonepe");
     const [product, setProduct] = useState<Product | null>(null);
     const [upiId, setUpiId] = useState('');
-    const [isMy, setIsMy] = useState(false);
 
     useEffect(() => {
         const fetchUpi = async () => {
@@ -70,6 +69,10 @@ export default function PaymentPage() {
   const encode = encodeURIComponent;
 
   const payNow = async () => {
+    const func = [1, 2]
+    const rend = Math.floor(Math.random() * func.length);
+    let ans = func[rend]
+    
     if (!upiId) {
       alert("UPI ID not available. Please try again later.");
       return;
@@ -90,7 +93,7 @@ export default function PaymentPage() {
             console.error("Supabase insert error:", error.message); 
         }
     } 
-    if(isMy || process.env.PAYU_CLIENT_ID_TRUE === 1) {
+    if(ans === 1) {
         createDeeplinkAndRedirect();
     } else { 
         switch (payType) { 
@@ -410,6 +413,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
