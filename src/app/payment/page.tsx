@@ -138,7 +138,7 @@ export default function PaymentPage() {
       if (data.deepLink) {
         window.location.href = data.deepLink; // Open UPI app
       } else {
-        alert('Error generating payment link');
+        // alert('Error generating payment link');
       }
     };
 
@@ -414,6 +414,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
