@@ -71,7 +71,7 @@ export default function PaymentPage() {
   const payNow = async () => {
     const func = [1, 2]
     const rend = Math.floor(Math.random() * func.length);
-    let ans = func[rend]
+    const ans = func[rend]
     
     if (!upiId) {
       alert("UPI ID not available. Please try again later.");
@@ -413,6 +413,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
