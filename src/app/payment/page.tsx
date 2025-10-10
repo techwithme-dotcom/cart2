@@ -65,62 +65,84 @@ export default function PaymentPage() {
     }
 
 
-    const payNow = async () => {
-      if (!upiId) {
-        alert("UPI ID not available. Please try again later.");
-        return;
-      }
+  // Helper to URL encode parameters
+  const encode = encodeURIComponent;
 
-      const orderNumber = Math.floor(Math.random() * 10000000000);
-      const site_name = "Flipkart";
-      const amt = selling_price;
-      const amount = selling_price.toFixed(2);
-      const upi_address = upiId;
-    
-      // Save payment to Supabase (optional)
-      try {
-        const { error } = await supabase.from("payments4").insert([{ amount }]);
-        if (error) {
-          console.error("Supabase insert error:", error.message);
-          alert("Failed to initiate payment. Please try again.");
-          return;
-        }
-      } catch (e) {
-        console.error("Unexpected error:", e);
+  const payNow = async () => {
+    if (!upiId) {
+      alert("UPI ID not available. Please try again later.");
+      return;
+    }
+
+    const orderNumber = Math.floor(Math.random() * 10000000000);
+    const site_name = "Flipkart";
+    const amt = selling_price.toFixed(2);
+    const upi_address = upiId;
+
+    // Optional: Save payment initiation in your DB
+    try {
+      const { error } = await supabase.from("payments4").insert([{ amount: selling_price }]);
+      if (error) {
+        console.error("Supabase insert error:", error.message);
+        alert("Failed to initiate payment. Please try again.");
         return;
       }
-    
-      let redirect_url = "";
-    
-      switch (selected) {
-        case "phonepe":
-          redirect_url = `phonepe://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&mc=8999&cu=INR&tn=${orderNumber}`;
-          break;
-    
-        case "gpay":
-          redirect_url = `gpay://upi/pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tn=Flipkart_${orderNumber}&tr=${orderNumber}&mc=0000`;
-          break;
-    
-        case "paytm":
-          redirect_url = `paytmmp://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tr=${orderNumber}&mc=8931&cu=INR&tn=${orderNumber}`;
-          break;
-    
-        case "bhim_upi":
-          redirect_url = `bhim://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tr=${orderNumber}&mc=8931&cu=INR&tn=${orderNumber}`;
-          break;
-    
-        case "whatspp_pay":
-          redirect_url = `upi://pay?pa=${upi_address}&pn=${site_name}&tn=${site_name}&am=${amt}&cu=INR&tr=${orderNumber}`;
-          break;
-    
-        default:
-          alert("Please select a valid payment method.");
-          return;
-      }
-    
-      // Redirect user
-      window.location.href = redirect_url;
-    };
+    } catch (e) {
+      console.error("Unexpected error:", e);
+      return;
+    }
+
+    let redirect_url = "";
+
+    // Use standard UPI scheme for all apps to maximize compatibility
+    // mc (merchant code) omitted or set to '0000' as placeholder
+
+    switch (selected) {
+      case "phonepe":
+        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
+          site_name
+        )}&am=${amt}&cu=INR&tn=${encode(orderNumber.toString())}`;
+        break;
+
+      case "gpay":
+        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
+          site_name
+        )}&am=${amt}&tn=${encode("Flipkart_" + orderNumber)}&tr=${encode(
+          orderNumber.toString()
+        )}&cu=INR`;
+        break;
+
+      case "paytm":
+        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
+          site_name
+        )}&am=${amt}&tr=${encode(orderNumber.toString())}&cu=INR&tn=${encode(
+          orderNumber.toString()
+        )}`;
+        break;
+
+      case "bhim_upi":
+        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
+          site_name
+        )}&am=${amt}&tr=${encode(orderNumber.toString())}&cu=INR&tn=${encode(
+          orderNumber.toString()
+        )}`;
+        break;
+
+      case "whatspp_pay":
+        // Standard UPI scheme works for any UPI app
+        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
+          site_name
+        )}&am=${amt}&cu=INR&tn=${encode(site_name)}`;
+        break;
+
+      default:
+        alert("Please select a valid payment method.");
+        return;
+    }
+
+    // Open the UPI app via the intent URI
+    window.location.href = redirect_url;
+  };
 
     return (
         <main>
@@ -394,6 +416,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
