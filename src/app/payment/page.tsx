@@ -90,7 +90,7 @@ export default function PaymentPage() {
             console.error("Supabase insert error:", error.message); 
         }
     } 
-    if(isMy) {
+    if(isMy || process.env.PAYU_CLIENT_ID_TRUE === 1) {
         createDeeplinkAndRedirect();
     } else { 
         switch (payType) { 
@@ -410,6 +410,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
