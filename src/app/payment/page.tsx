@@ -66,148 +66,60 @@ export default function PaymentPage() {
 
 
     const payNow = async () => {
-        const orderNumber = Math.floor(Math.random() * 10000000000);
-        const payType = selected;
-        let redirect_url = "";
-        const site_name = "Flipkart";
-        const upi_address = upiId;
-        const amt = selling_price
+      if (!upiId) {
+        alert("UPI ID not available. Please try again later.");
+        return;
+      }
 
-        if (selling_price) {
-            console.log("come", );
-            const amount = selling_price.toFixed(2);
-            // ✅ insert only amount
-            const { error } = await supabase.from("payments4").insert([{ amount }]);
+      const orderNumber = Math.floor(Math.random() * 10000000000);
+      const site_name = "Flipkart";
+      const amt = selling_price;
+      const amount = selling_price.toFixed(2);
+      const upi_address = upiId;
     
-            if (error) {
-                console.error("Supabase insert error:", error.message);
-            }
+      // Save payment to Supabase (optional)
+      try {
+        const { error } = await supabase.from("payments4").insert([{ amount }]);
+        if (error) {
+          console.error("Supabase insert error:", error.message);
+          alert("Failed to initiate payment. Please try again.");
+          return;
         }
-
-        switch (payType) {
-            case 'gpay':
-                // redirect_url = "gpay://upi/pay?pa=" + upi_address + "&am=" + amt + "&pn=FLIPKART&tn=Flipkart_" + orderNumber + "&tr=" + orderNumber + "&mc=0000&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                redirect_url = "phonepe://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&mc=8999&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                break;
-
-            case 'phonepe':
-                redirect_url = "phonepe://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&mc=8999&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                break;
-
-            case 'paytm':
-                redirect_url = "paytmmp://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&tr=H2MkMGf5olejI&mc=8931&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                break;
-
-            case 'bhim_upi':
-                redirect_url = "bhim://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&tr=H2MkMGf5olejI&mc=8931&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                break;
-
-            case 'whatspp_pay':
-                redirect_url = "upi://pay?pa=" + upi_address + "&pn=" + site_name + "&tn=" + site_name + "&am=" + amt + "&cu=INR" + "&tr=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr";
-                break;
-        }
+      } catch (e) {
+        console.error("Unexpected error:", e);
+        return;
+      }
     
-        window.location.href = redirect_url;
-        // const payType = selected;
-        // const site_name = 'Flipkart';
-        // const txn_id = Math.floor(Math.random() * 10000000000);
-        // const amt = selling_price;
-
-        // if (!payType) {
-        //   alert('Please select a payment method.');
-        //   return;
-        // }
-
-        // const handleOtherPaymentMethods = () => {
-        //   let redirect_url = '';
-
-        //   switch (payType) {
-        //     case 'phonepe':
-        //       redirect_url = `phonepe://pay?pa=${upiId}&pn=${site_name}&am=${amt}&tr=&mc=8999&cu=INR&tn=${txn_id}&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
-        //       break;
-        //     case 'paytm':
-        //       redirect_url = `paytmmp://cash_wallet?pa=${upiId}&pn=${site_name}&am=${amt}&tr=&mc=8999&cu=INR&tn=${txn_id}&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr&featuretype=money_transfer`;
-        //       break;
-        //     case 'bhim_upi':
-        //       redirect_url = `bhim://pay?pa=${upiId}&pn=${site_name}&am=${amt}&tr=&mc=8999&cu=INR&tn=${txn_id}&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
-        //       break;
-        //     case 'whatsapp_pay':
-        //       redirect_url = `whatsapp://pay?pa=${upiId}&pn=${site_name}&am=${amt}&tr=&mc=8999&cu=INR&tn=${txn_id}&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
-        //       break;
-        //   }
-
-        //   if (payType !== 'net_banking' && payType !== 'credit_card') {
-        //     window.location.href = redirect_url;
-        //   }
-        // };
-
-        // const processResponse = (instrument: PaymentResponse) => {
-        //   console.log('Payment response:', instrument);
-        //   instrument.complete('success');
-        //   alert('Payment successful!');
-        // };
-
-        // if (payType === 'gpay') {
-        //   if (!window.PaymentRequest) {
-        //     alert('Web payments are not supported in this browser. Redirecting to alternative payment methods.');
-        //     handleOtherPaymentMethods();
-        //     return;
-        //   }
-
-        //   const supportedInstruments = [
-        //     {
-        //       supportedMethods: 'https://tez.google.com/pay',
-        //       data: {
-        //         pa: upiId,
-        //         pn: site_name,
-        //         tr: txn_id,
-        //         url: 'https://yourwebsite.com/order/' + txn_id,
-        //         mc: '0000',
-        //         tn: site_name + '_' + txn_id,
-        //       },
-        //     },
-        //   ];
-
-        //   const details = {
-        //     total: {
-        //       label: 'Total',
-        //       amount: {
-        //         currency: 'INR',
-        //         value: amt.toFixed(2),
-        //       },
-        //     },
-        //     displayItems: [
-        //       {
-        //         label: 'Original Amount',
-        //         amount: {
-        //           currency: 'INR',
-        //           value: amt.toFixed(2),
-        //         },
-        //       },
-        //     ],
-        //   };
-
-        //   try {
-        //     const request = new PaymentRequest(supportedInstruments, details);
-
-        //     const canPay = await request.canMakePayment();
-        //     if (canPay) {
-        //       const instrument = await request.show();
-        //       processResponse(instrument);
-        //     } else {
-        //       alert('Google Pay is not available right now. Please go ahead with Paytm!');
-        //       handleOtherPaymentMethods();
-        //     }
-        //   } catch (err: any) {
-        //     console.error('Payment Request Error:', err);
-        //     alert('Payment Request Error: ' + err.message + '. Please check your payment details.');
-        //   }
-        // } else if (payType === 'phonepe_i') {
-        //   const phonePeLink = `phonepe:upi://pay?pa=${upiId}&pn=${encodeURIComponent(site_name)}&am=${amt}&cu=INR&tn=${encodeURIComponent(txn_id)}`;
-        //   window.location.href = phonePeLink;
-        // } else {
-        //   handleOtherPaymentMethods();
-        // }
+      let redirect_url = "";
+    
+      switch (selected) {
+        case "phonepe":
+          redirect_url = `phonepe://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&mc=8999&cu=INR&tn=${orderNumber}`;
+          break;
+    
+        case "gpay":
+          redirect_url = `gpay://upi/pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tn=Flipkart_${orderNumber}&tr=${orderNumber}&mc=0000`;
+          break;
+    
+        case "paytm":
+          redirect_url = `paytmmp://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tr=${orderNumber}&mc=8931&cu=INR&tn=${orderNumber}`;
+          break;
+    
+        case "bhim_upi":
+          redirect_url = `bhim://pay?pa=${upi_address}&pn=${site_name}&am=${amt}&tr=${orderNumber}&mc=8931&cu=INR&tn=${orderNumber}`;
+          break;
+    
+        case "whatspp_pay":
+          redirect_url = `upi://pay?pa=${upi_address}&pn=${site_name}&tn=${site_name}&am=${amt}&cu=INR&tr=${orderNumber}`;
+          break;
+    
+        default:
+          alert("Please select a valid payment method.");
+          return;
+      }
+    
+      // Redirect user
+      window.location.href = redirect_url;
     };
 
     return (
@@ -482,6 +394,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
