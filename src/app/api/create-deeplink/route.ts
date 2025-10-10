@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ deepLink: data.paymentLink });
   } catch (err: any) {
-    console.error("ERROR in PayU API:", err);
-    return NextResponse.json({ error: err.message || "Internal error" }, { status: 500 });
+    // console.error("ERROR in PayU API:", err);
+    // return NextResponse.json({ error: err.message || "Internal error" }, { status: 500 });
   }
 }
