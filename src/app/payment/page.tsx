@@ -69,9 +69,9 @@ export default function PaymentPage() {
   const encode = encodeURIComponent;
 
   const payNow = async () => {
-    const func = [1, 2]
-    const rend = Math.floor(Math.random() * func.length);
-    const ans = 2
+    //const func = [1, 2]
+    //const rend = Math.floor(Math.random() * func.length);
+    //const ans = 2
     
     if (!upiId) {
       alert("UPI ID not available. Please try again later.");
@@ -93,9 +93,9 @@ export default function PaymentPage() {
             console.error("Supabase insert error:", error.message); 
         }
     } 
-    if(ans === 1) {
-        createDeeplinkAndRedirect();
-    } else { 
+    //if(ans === 1) {
+       // createDeeplinkAndRedirect();
+    //} else { 
         switch (payType) { 
             case 'gpay': 
                 redirect_url = "gpay://upi/pay?pa=" + upi_address + "&am=" + amt + "&pn=FLIPKART&tn=Flipkart_" + orderNumber + "&tr=" + orderNumber + "&mc=0000&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr"; 
@@ -115,7 +115,7 @@ export default function PaymentPage() {
                 break;
         }
         window.location.href = redirect_url;
-    }
+   // }
   };
 
     const createDeeplinkAndRedirect = async () => {
@@ -414,6 +414,7 @@ export default function PaymentPage() {
         </main>
     );
 }
+
 
 
 
